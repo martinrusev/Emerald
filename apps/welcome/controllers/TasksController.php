@@ -1,13 +1,32 @@
 <?php 
 
-class TasksController
+class TasksController extends Controller
 {
 	
-	
-	/** get "/view_tasks" */
-	function view_tasks()
+	function __construct($app)
 	{
-		echo "All tasks are here";
+		parent::Controller($app);	
+	}
+	
+	
+	/** get "/view_tasks/:tasklist_id/:task_id" */
+	function view_tasks($params = null)
+	{
+		$data['test_data'] = array('test','another_test');
+		
+		
+		$this->render_files(array('header', 'content', 'footer'), $data);
+	
+	}
+	
+	
+	/** get "/view_tasklist/:id/:tasklist_id" */
+	function view_tasklist($params = null)
+	{
+		
+			
+		$this->render_files(array('header', 'content', 'footer'), $data);
+	
 	}
 		
 	
