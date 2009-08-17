@@ -9,13 +9,13 @@ class TasksController extends Controller
 	}
 	
 	
-	/** get "/view_tasks/:tasklist_id/:task_id" */
+	/** get "/hello" */
 	function view_tasks($params = null)
 	{
 		$data['test_data'] = array('test','another_test');
 		
 		
-		$this->render_files(array('header', 'content', 'footer'), $data);
+		$this->render_file('hello');
 	
 	}
 	
@@ -25,7 +25,26 @@ class TasksController extends Controller
 	{
 		
 			
-		$this->render_files(array('header', 'content', 'footer'), $data);
+		$this->render_files(array('content', 'footer'), $data);
+	
+	}
+	
+	
+	function new_tasklist($params=null)
+	{
+		print_r($params);
+		
+		$this->render_file('hello');
+		
+	}
+	
+	
+	
+	function delete_task($params = null)
+	{
+		
+			
+		//$this->render_file('hello');
 	
 	}
 		

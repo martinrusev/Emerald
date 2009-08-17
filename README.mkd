@@ -1,4 +1,4 @@
-Emerald: README
+#Emerald: README
 
 Emerald is a PHP micro framework for rapid web development and prototyping
 It's inspired by frameworks like [Sinatra](http://www.sinatrarb.com/ "Sinatra"), 
@@ -7,6 +7,10 @@ It's inspired by frameworks like [Sinatra](http://www.sinatrarb.com/ "Sinatra"),
 With Emerald you can create reusable apps and copy them across projects with minimal effort.
 Emerald is counterpart to [Crystal](http://crystal.martinrusev.net/ "Crystal"), together they form minimalistic framework stack.
 
-/** get '/' **/
+##Working with Emerald 
+
+Download the latest package from github.
+
+	/** get '/' **/
 
 
