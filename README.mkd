@@ -7,10 +7,182 @@ It's inspired by frameworks like [Sinatra](http://www.sinatrarb.com/ "Sinatra"),
 With Emerald you can create reusable apps and copy them across projects with minimal effort.
 Emerald is counterpart to [Crystal](http://crystal.martinrusev.net/ "Crystal"), together they form minimalistic framework stack.
 
-##Working with Emerald 
+## Introduction to Emerald 
 
-Download the latest package from github.
+Building something else, beyond simple apps with microframeworks is a painful process. Emerald is my attempt to solve this problem. 
+
+Emerald is build around two ideas, that I borrow from Django - multiple apps and urlpatterns. Besides that with Emerald you can
+prototype your application defining the url parameters like this:
 
 	/** get '/' **/
+	function welcome()
+	{
+		$this->render_raw("<html><body>Welcome to my app</body></html>");
+	}
+	
+	/** get '/hello/world' **/
+	function hello()
+	{
+	
+		$this->render_raw("<html><body>Hello world</body></html>");
+	
+	}
+	
+## Building your first application 
+
+Download the latest package from github. Paste the Emerald package
+in your apache served directory. Open the file **/path/to/Emerald/config/settings.php**
+Edit the line:
+	$config['base_url'] = '';
+
+Add the url to your Emerald project. For example:
+	$config['base_url'] = 'http://localhost/emerald_app';	
+
+**Note - your URL must not end with /**
+
+In the **path/to/Emerald/apps/** directory you will find basic hello world app.
+
+The directory structure for you applications is
+	-app_name
+		--controllers
+		--templates	
+		
+Creating new applications is easy - in the directory **/path/to/Emerald/apps** create new
+directory. For example we want to create mini application dealing with user registration, 
+so we create the directory **registration** and 2 sub directories - **controllers** and **templates**
+Now our directory will look like this:
+	/path/to/Emerald/
+	-- apps
+		--welcome
+			--controllers
+			--templates
+		--registration
+			--controllers
+			--templates
+	--config
+	--Emerald
+	--libs
+	.htacess
+	index.php
+	
+The next step is to add our registration app in the list with the installed apps. Go to **path/to/Emerald/config/settings.php**
+and in the array
+
+	$config['installed_apps'] = array('welcome');
+
+add our new application like this:
+
+	$config['installed_apps'] = array('welcome','registration');
+
+Now we can begin building our registration application. Create new controller in **path/to/Emerald/registration/controllers**
+Give it whatever name you like. The name convention for your controllers is **NameController.php**. In this case 
+our controller will be **RegistrationController.php**. Paste this in our controller:
+
+	class RegistrationController extends Controller
+	{
+		
+		function __construct($app)
+		{
+			parent::Controller($app);	
+		}
+	}
+
+The variable **$app** is parsed automaticaly as parameter by Emerald, so you can forget about it for now.
+
+### Emerald Routing - Sinatra way
+
+Now let's build our first url mapping function. We want to map www.site.com/registration, this is done by writing this function:
+	
+	/** get "/registration" **/
+	function registration()
+	{
+	
+	}
+#### Passing parameters to functions 
+
+The function name doesn't matter, so you can write whatever you want. Passing parameters in our function is done like this:
+
+	/** get "/user/:id **/
+	function view_user($params = null)
+	{
+		//Now we can access our id
+		$this->id = (int)$params[0];
+	
+	}
+	
+### Emerald Routing - Django way
+
+Emerald was created with one purpose - help building reusable applications with PHP. So like in Django we have multiple apps
+and url patterns. Building prototypes with Sinatra based routes is OK when you test or create something small. For production
+use this method is slow, because it uses PHP Reflection class, scans every method and runs regular expression against every
+defined in the function comment route. Now let's create the same functions, but this time with url patterns.
+Open the file **path/to/Emerald/config/ursl.php**. There you will se the $urlpatterns array. Delete the test methods
+and define your own:
+
+$urlpatterns = array
+(
+	/** REGISTRATION APP **/
+	'^\/$' => array('path' => 'welcome/registration/registration', 'method' => 'get'),
+	'^user\/\/(\d+)\/$' => array('path' => 'welcome/registration/view_user', 'method' => 'get')
+	
+); 
+
+**Note In the $urlpatterns array I use the default PHP regular expression. So you must escape the special
+characters like /**  
+
+#### Passing parameters to functions
+
+If you want to pass parameters, enclose every parameter with **()**. Emerald will look for this strings and will pass them 
+as parameters to your functions. With this routing type you have 3 major advantages:
+
++  Your urls are secure. Malformed url requests will raise errors
++  The parameters passed in the url are only what you need - Integers, strings.
++  You can design your urls to whatever you want, without the limitation to parse parameters only at the end
+
+For example you can write: 
+
+$urlpatterns = array
+(
+	/** REGISTRATION APP WITH LANGUAGE SUPPORT **/
+	'^([a-z0-9])\/user\/\/(\d+)\/$' => array('path' => 'welcome/registration/view_user', 'method' => 'get')
+	
+); 
+
+
+### Templates
+
+The default templates directory in Emerald is **/path/to/Emerald/apps/our_app/templates/**
+
+#### Rendering templates
+
+Rendering templates in Emerald is easy.It is done like this: 
+
+	$this->render_file('template_name');
+
+You can render multiple templates with the function `render_files()` like  this:
+
+	$this->render_files('header','content','footer');		
+
+Or we can render raw html strings: 
+
+	$this->render_raw('<html><body>Hello world</body></html>);
+
+
+### Passing variables to templates
+
+Passing variables from our functions to the template is done in a way similar to Codeigniter.
+Defining our variables is done in one global data array:
+
+	$data['variable'] = 'My first variable';
+	
+	$this->render_file('template',$data);
+	
+	
+	// in template.php
+	<?php echo $variable; ?>
+	
+	
+That completes my tutorial on Emerald. For more information and examples, 
+go to [emerald.martinrusev.net](http://emerald.martinrusev.net/ "Emerald")
 
 

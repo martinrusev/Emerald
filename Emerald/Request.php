@@ -9,7 +9,6 @@ class Emerald_Request
 		$explode_base = explode('/', $base_url);
 		$key = array_search(end($explode_base), $explode);
 		
-		
 		$this->current_url =  implode('/',array_slice($explode, (int)$key+1));
 	}
 	

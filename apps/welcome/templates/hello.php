@@ -1,1 +1,1 @@
-Hello world
+<h1>Hello world from <?php echo $emerald; ?></h1>

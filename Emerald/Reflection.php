@@ -8,6 +8,7 @@ class Emerald_Reflection
 		
 		$route = $this->find_route_config($current_url, $apps);
 		
+		
 		if($route == FALSE)
 		{
 			$this->find_comment_route($current_url, $apps);	
@@ -127,6 +128,7 @@ class Emerald_Reflection
 			
 			$directory_structure = scandir($directory);
 			
+			
 			foreach($directory_structure as $key => $file)
 			{
 				
@@ -142,28 +144,48 @@ class Emerald_Reflection
 					/** SCANS METHODS IN CONTROLLER **/
 					foreach ($methods as $method)
 					{
+						
 						$method_reflection = new ReflectionMethod($controller, $method->name);
 						$comments = $method_reflection->getDocComment();
 						$extract_route = preg_match('/"([^"]+)"/', $comments, $match);
-					
+						
+						
+											
 												
 						if(isset($match[1]))
 						{
 							
+														
 							$explode_route = explode('/', $match[1]);
 							$explode_current_url = explode('/', $current_url);
-						
+							$match_urls = ($explode_current_url[0] == $explode_route[0]);
 							
-							/** TODO rewrite it with real regular expressions **/
-							if($explode_route[1] == $explode_current_url[0])
+							
+							/** MATCHES '/' **/
+							if($match[1] == '/' && $match_urls == TRUE)
 							{
 								
+								$data['params'] = '';
+								$data['controller'] = $controller;
+								$data['method'] = $method->name;
+								$data['path'] = $directory;
+								$data['app'] = $value;
+								$this->data = $data; 
+							}
+							/** MATCHES EVERYTHING ELSE **/
+							else
+							{
+															
+								/** TODO rewrite it with real regular expressions **/
+								if($explode_route[1] == $explode_current_url[0])
+								{
+										
 								$total_route_params = count($explode_route)-2;
 								$total_current_url_params = count($explode_current_url)-1;
-								
+										
 								/** URL MATCHES ONLY WHEN PARAMS IN CURRENT URL AND DEFINED 
-								 * IN THE ROUTE MATCH
-								 */
+								* IN THE ROUTE MATCH
+								*/
 								if($total_current_url_params == $total_route_params)
 								{
 									$data['params'] = array_slice($explode_current_url, 1, $total_route_params);
@@ -172,9 +194,12 @@ class Emerald_Reflection
 									$data['path'] = $directory;
 									$data['app'] = $value;
 									$this->data = $data;
-									
-									
+																
 								}
+								
+								
+							}
+							
 								
 								
 								

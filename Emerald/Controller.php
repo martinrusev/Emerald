@@ -10,7 +10,7 @@ class Controller
 		
 	}
 	
-	/**
+	/*
      * Render single file.
      * @param  string   $filename   Name of the file to render
      * @param  array    $bindings   User variables
@@ -29,7 +29,7 @@ class Controller
     }
 	
 	
-	/**
+	/*
      * Render multiple files.
      * @param  string   $filenames   Array with files to render
      * @param  array    $variables   User variables
@@ -55,6 +55,16 @@ class Controller
         ob_end_flush();
 		
     }
+	
+	public function render_raw($string)
+	{
+		
+		 ob_start();
+		 echo $string;	
+         ob_end_flush();
+		
+		
+	}
 	
 	
 

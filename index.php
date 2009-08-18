@@ -21,6 +21,8 @@ if($last != '/')
 }
 
 $route = new Emerald_Request($current_url, $config['base_url']);
+
+
 $find_route = new Emerald_Reflection($route->current_url, $config['installed_apps']);
 
 
@@ -38,4 +40,3 @@ $find_route = new Emerald_Reflection($route->current_url, $config['installed_app
 	{
 		Response::raise404();
 	}
-
